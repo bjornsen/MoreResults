@@ -1,0 +1,111 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+<style type="text/css">
+body{
+ background-color:grey;
+
+}
+#frame{
+	min-width:4000px;
+	min-height: 1500px;
+	background-color: white;
+	margin: auto;
+  	display:inline-block;
+}
+.box{
+	width:100px;
+	height: 100px;
+	background-color: blue;
+	margin: 3px;
+	float: left;
+}
+.pop{
+	width:206px;
+	height:206px;
+	position: absolute;
+  	background-color:pink;
+}
+.push{
+	margin-left: 109px;
+}
+</style>
+
+
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.0/jquery.min.js"></script>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.9/jquery-ui.min.js"></script>
+ 
+<script type="text/javascript">
+$( init );
+function init() {
+  $('#frame').draggable();
+}
+
+
+</script>
+
+
+</head>
+<body>
+
+
+<div id="frame" draggable="true">
+<img/>
+	<script type="text/javascript">
+		
+	function loadImage(imageIndex)
+	{
+        img = new Image();
+        img.src = 'images/images-' + imageIndex + '.jpeg';
+
+        img.onload = 
+        function()
+        {
+       		$("<img class='box' src='" + img.src + "' />").appendTo("#frame");
+       		loadImage(imageIndex + 1);
+        };
+
+        img.onerror = triggerImageLoad;
+    }
+
+    var setsLoaded = 0;
+    var TOTAL_SETS = 9;
+    function triggerImageLoad()
+    {
+    	if(setsLoaded >= TOTAL_SETS)
+    	{
+    		imageSetsLoadComplete();
+    		return;
+    	}
+    	loadImage(0);
+   		++setsLoaded;
+   	}
+
+    triggerImageLoad();
+
+    function imageSetsLoadComplete()
+    {
+	    /*select and zoom*/ 
+		$(".box").hover(
+		  function () {
+		  	var position = $(this).position();
+		    $(this).css({ "left" : position.left, "top" : position.top }); 
+		    $(this).addClass("pop");
+		    $(this).next().addClass("push");
+		  },
+		  function () {
+		    $(this).removeClass("pop");
+		    $(this).next().removeClass("push");
+		  }
+		);
+	}
+	</script>
+</div>
+
+
+
+
+
+</body>
+</html>
