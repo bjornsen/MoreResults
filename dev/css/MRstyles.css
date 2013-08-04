@@ -1,0 +1,28 @@
+body{
+ background-color:grey;
+
+}
+#frame{
+	max-width:4000px;
+	min-width:4000px;
+	min-height: 1500px;
+	background-color: white;
+	margin: auto;
+  	display:inline-block;
+}
+.box{
+	width:100px;
+	height: 100px;
+	background-color: blue;
+	margin: 3px;
+	float: left;
+}
+.pop{
+	width:206px;
+	height:206px;
+	position: absolute;
+  	background-color:pink;
+}
+.push{
+	margin-left: 109px;
+}
