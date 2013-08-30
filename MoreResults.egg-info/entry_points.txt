@@ -1,0 +1,5 @@
+      [paste.app_factory]
+      main = moreresults:main
+      [console_scripts]
+      initialize_MoreResults_db = moreresults.scripts.initializedb:main
+      
