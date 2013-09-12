@@ -31,6 +31,7 @@ def git_update(request):
             return Response('OK')
         elif json['Type'] == 'Notification':
             log.debug('Received a notification from Amazon SNS')
+            log.debug(json)
             return Response('OK')
     except KeyError:
         log.debug('Not an Amazon SNS notification')
