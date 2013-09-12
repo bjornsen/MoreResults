@@ -21,17 +21,21 @@ def my_route_view(request):
 
 @view_config(route_name='git_autoupdate')
 def git_update(request):
+    json = request.json_body
     try:
-        if request.matchdict['x-amz-sns-message-type'] == 'SubscriptionConfirmation':
-            json = request.json_body
+        if json['Type'] == 'SubscriptionConfirmation':
             url = json['SubscribeURL']
             response = requests.get(url)
-            log.debut('Received Subscription Confirmation from Amazon SNS')
-        elif request.matchdict['x-amz-sns-message-type'] == 'Notification':
+            log.debug('Received Subscription Confirmation from Amazon SNS')
+            requests.get(json['SubscribeURL'])
+            return Response('OK')
+        elif json['Type'] == 'Notification':
             log.debug('Received a notification from Amazon SNS')
             return Response('OK')
     except KeyError:
         log.debug('Not an Amazon SNS notification')
+        log.debug(str(request.json_body))
+        log.debug(str(request.headers))
         return Response('Not an Amazon SNS notification')
 
 @view_config(route_name='home', renderer='templates/mytemplate.pt')
