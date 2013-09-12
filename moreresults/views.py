@@ -1,6 +1,7 @@
 from pyramid.response import Response
 from pyramid.view import view_config
 import requests
+import logging
 
 from sqlalchemy.exc import DBAPIError
 
@@ -8,6 +9,8 @@ from .models import (
     DBSession,
     MyModel,
     )
+
+log = logging.getLogger(__name__)
 
 
 @view_config(route_name='myroute')
@@ -18,13 +21,17 @@ def my_route_view(request):
 
 @view_config(route_name='git_autoupdate')
 def git_update(request):
-    if request.matchdict['x-amz-sns-message-type'] == 'SubscriptionConfirmation':
-        json = request.json_body
-        url = json['SubscribeURL']
-        response = requests.get(url)
-        log.info('Received Subscription Confirmation from Amazon SNS')
-    elif request.matchdict['x-amz-sns-message-type'] == 'Notification':
-        log.info('Received a notification from Amazon SNS')
+    try:
+        if request.matchdict['x-amz-sns-message-type'] == 'SubscriptionConfirmation':
+            json = request.json_body
+            url = json['SubscribeURL']
+            response = requests.get(url)
+            log.debut('Received Subscription Confirmation from Amazon SNS')
+        elif request.matchdict['x-amz-sns-message-type'] == 'Notification':
+            log.debug('Received a notification from Amazon SNS')
+    except KeyError:
+        log.debug('Not an Amazon SNS notification')
+        return Response('Not an Amazon SNS notification')
 
 @view_config(route_name='home', renderer='templates/mytemplate.pt')
 def my_view(request):
