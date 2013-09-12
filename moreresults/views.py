@@ -29,6 +29,7 @@ def git_update(request):
             log.debut('Received Subscription Confirmation from Amazon SNS')
         elif request.matchdict['x-amz-sns-message-type'] == 'Notification':
             log.debug('Received a notification from Amazon SNS')
+            return Response('OK')
     except KeyError:
         log.debug('Not an Amazon SNS notification')
         return Response('Not an Amazon SNS notification')
