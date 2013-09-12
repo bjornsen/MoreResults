@@ -1,7 +1,6 @@
 from pyramid.response import Response
 from pyramid.view import view_config
 import requests
-import logging
 
 from sqlalchemy.exc import DBAPIError
 
@@ -10,7 +9,6 @@ from .models import (
     MyModel,
     )
 
-log = logging.getLogger(__name__)
 
 @view_config(route_name='myroute')
 def my_route_view(request):
@@ -18,15 +16,15 @@ def my_route_view(request):
     two = request.matchdict['two']
     return Response(one + ' ' + two)
 
-@view_config(route_name='git_autoupdate', 
-             request_param='arn:aws:sns:us-west-2:934680412194:more-results-update')
+@view_config(route_name='git_autoupdate')
 def git_update(request):
     if request.matchdict['x-amz-sns-message-type'] == 'SubscriptionConfirmation':
         json = request.json_body
         url = json['SubscribeURL']
         response = requests.get(url)
-        log.debug("AWS url: %s", url)
-        return Response('OK')
+        log.info('Received Subscription Confirmation from Amazon SNS')
+    elif request.matchdict['x-amz-sns-message-type'] == 'Notification':
+        log.info('Received a notification from Amazon SNS')
 
 @view_config(route_name='home', renderer='templates/mytemplate.pt')
 def my_view(request):
