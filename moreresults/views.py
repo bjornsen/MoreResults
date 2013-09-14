@@ -14,11 +14,11 @@ from .models import (
 log = logging.getLogger(__name__)
 
 
-#@view_config(route_name='myroute')
-#def my_route_view(request):
-#    one = request.matchdict['one']
-#    two = request.matchdict['two']
-#    return Response(one + ' ' + two)
+@view_config(route_name='myroute')
+def my_route_view(request):
+    one = request.matchdict['one']
+    two = request.matchdict['two']
+    return Response(one + ' ' + two)
 
 @view_config(route_name='git_autoupdate')
 def git_update(request):
